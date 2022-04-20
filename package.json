@@ -1,0 +1,34 @@
+{
+  "name": "bot",
+  "version": "1.0.0",
+  "description": "oitq bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "compile": "tsc --project tsconfig.json",
+    "alias": "tsc-alias -p tsconfig.json",
+    "build": "npm run compile && npm run alias",
+    "dev": "ts-node-dev --project tsconfig.json -r tsconfig-paths/register  ./src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/oitq/bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/oitq/bot/issues"
+  },
+  "homepage": "https://github.com/oitq/bot#readme",
+  "dependencies": {
+    "oitq": "^1.2.9"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.8",
+    "tsc-alias": "^1.5.0",
+    "tsconfig-paths": "^3.12.0",
+    "typescript": "^4.5.4"
+  }
+}
