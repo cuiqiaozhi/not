@@ -13,10 +13,10 @@ app.plugin(callme)
     .plugin(schedule)
     .plugin(database,{
         dialect:'mysql',
-        host:'148.70.201.93',
+        host:'*.*.*。*',
         database:'oitq',
         username:'root',
-        password:'l196023.',
+        password:'123456',
         logging:()=>{}
     })
 app.start(8086)
