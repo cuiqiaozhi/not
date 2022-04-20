@@ -23,9 +23,16 @@
   },
   "homepage": "https://github.com/oitq/bot#readme",
   "dependencies": {
+    "@oitq/plugin-callme": "^0.0.1",
+    "@oitq/plugin-common": "^0.0.1",
+    "@oitq/plugin-database": "^0.2.1",
+    "@oitq/plugin-music": "^0.0.1",
+    "@oitq/plugin-qa": "^0.2.1",
+    "@oitq/plugin-schedule": "^0.1.0",
     "oitq": "^1.2.9"
   },
   "devDependencies": {
+    "@types/node": "^17.0.25",
     "ts-node-dev": "^1.1.8",
     "tsc-alias": "^1.5.0",
     "tsconfig-paths": "^3.12.0",
