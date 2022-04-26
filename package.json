@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/oitq/bot#readme",
   "dependencies": {
-    "@oitq/cli": "^0.1.19",
+    "@oitq/cli": "^0.1.21",
     "@oitq/plugin-admin": "^0.0.2",
     "@oitq/plugin-callme": "^0.0.4",
     "@oitq/plugin-common": "^0.0.6",
