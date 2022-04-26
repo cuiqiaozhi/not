@@ -7,6 +7,8 @@
     "compile": "tsc --project tsconfig.json",
     "alias": "tsc-alias -p tsconfig.json",
     "build": "npm run compile && npm run alias",
+    "add": "oitq add",
+    "remove": "oitq remove",
     "dev": "oitq start . --log-level info --watch -r esbuild-register -r tsconfig-paths/register",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,7 +24,7 @@
   },
   "homepage": "https://github.com/oitq/bot#readme",
   "dependencies": {
-    "@oitq/cli": "^0.1.21",
+    "@oitq/cli": "^0.1.22",
     "@oitq/plugin-admin": "^0.0.2",
     "@oitq/plugin-callme": "^0.0.4",
     "@oitq/plugin-common": "^0.0.6",
@@ -30,7 +32,7 @@
     "@oitq/plugin-music": "^0.0.2",
     "@oitq/plugin-qa": "^0.2.4",
     "@oitq/plugin-schedule": "^0.1.1",
-    "oitq": "^1.2.15"
+    "oitq": "^1.2.17"
   },
   "devDependencies": {
     "esbuild": "^0.14.38",
