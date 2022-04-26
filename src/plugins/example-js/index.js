@@ -1,7 +1,8 @@
 module.exports={
     name:'example-js',
     install(ctx){
-        ctx.command('testJs')
+        console.log(1)
+        ctx.command('testJs','js样例')
             .action(({session})=>{
                 session.reply('hello js')
             })

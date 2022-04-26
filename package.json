@@ -2,13 +2,12 @@
   "name": "bot",
   "version": "1.0.0",
   "description": "oitq bot",
-  "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "start": "oitq start .",
     "compile": "tsc --project tsconfig.json",
     "alias": "tsc-alias -p tsconfig.json",
     "build": "npm run compile && npm run alias",
-    "dev": "ts-node-dev --project tsconfig.json -r tsconfig-paths/register  ./src/index.ts",
+    "dev": "oitq start . --log-level info --watch -r esbuild-register -r tsconfig-paths/register",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,9 +22,19 @@
   },
   "homepage": "https://github.com/oitq/bot#readme",
   "dependencies": {
-    "oitq": "^1.2.9"
+    "@oitq/cli": "^0.1.19",
+    "@oitq/plugin-admin": "^0.0.2",
+    "@oitq/plugin-callme": "^0.0.4",
+    "@oitq/plugin-common": "^0.0.6",
+    "@oitq/plugin-database": "^0.2.3",
+    "@oitq/plugin-music": "^0.0.2",
+    "@oitq/plugin-qa": "^0.2.4",
+    "@oitq/plugin-schedule": "^0.1.1",
+    "oitq": "^1.2.15"
   },
   "devDependencies": {
+    "esbuild": "^0.14.38",
+    "esbuild-register": "^3.3.2",
     "ts-node-dev": "^1.1.8",
     "tsc-alias": "^1.5.0",
     "tsconfig-paths": "^3.12.0",
