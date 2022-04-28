@@ -15,82 +15,89 @@ function applyAdminHandler(ctx:Context,session:NSession<'request'>){
 }
 export function install(ctx:Context){
     ctx.group()
-        .command('admin/bot/mute [user_id:number]','禁言群成员')
+        .command('admin/bot/mute [...userIds]','禁言群成员')
         .option('time','-t <time:number> 禁言时长（单位：秒；默认：600）')
         .check(({session})=>{
             if((!['admin','owner'].includes(session.sender['role']) && !session.bot.admins.includes(session.sender.user_id))
-                || (!session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_admin
-                    && !session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_owner)){
+                || (!session.bot.pickGroup(session.group_id).is_admin
+                    && !session.bot.pickGroup(session.group_id).is_owner)){
                 return '权限不足'
             }
         })
-        .action(async ({session,bot,options},user_id)=>{
-            if(!user_id){
-                const atUser=(session.message.find(msg=>msg.type==='at') as AtElem)?.qq
-                if(typeof atUser==='number')user_id=atUser
-            }
-            if(!user_id){
-                const {id}=await session.prompt({
-                    type:'number',
+        .action(async ({session,bot,options},...user_ids)=>{
+            let muteUsers:number[]=[]
+            muteUsers.push(...user_ids.filter(user_id=>user_id.match(/^[0-9]*$/)).map(Number))
+            muteUsers.push(...session.message.filter(msg=>msg.type==='at'&& typeof msg.qq==='number').map(msg=>msg['qq']))
+            if(!muteUsers.length){
+                const {ids}=await session.prompt({
+                    type:'list',
                     message:'请输入你要禁言的成员qq',
-                    name:'id'
+                    name:'ids',
+                    format:(value)=>value.map(val=>Number(val))
                 })
-                if(id)user_id=id
+                if(ids.length)muteUsers.push(...ids)
             }
-            if(!user_id) return 'user_id无效'
-            return bot.pickGroup(session.group_id).muteMember(user_id,options.time)
+            if(!muteUsers.length)return '禁言了0个成员'
+            for(const user_id of muteUsers){
+                await bot.pickGroup(session.group_id).muteMember(user_id,options.time)
+            }
+            if(options.time===0)return `已解除禁言:${muteUsers.join(',')}。`
+            return `已禁言:${muteUsers.join(',')}。\n禁言时长：${(options.time||600)/60}分钟`
         })
 
     ctx.group()
-        .command('admin/bot/kick [user_id:number]','踢出群成员')
+        .command('admin/bot/kick [...user_id]','踢出群成员')
         .option('block','-b 是否拉入黑名单(默认false)')
         .check(({session})=>{
             if((!['admin','owner'].includes(session.sender['role']) && !session.bot.admins.includes(session.sender.user_id))
-                || (!session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_admin
-                    && !session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_owner)){
+                || (!session.bot.pickGroup(session.group_id).is_admin
+                    && !session.bot.pickGroup(session.group_id).is_owner)){
                 return '权限不足'
             }
         })
-        .action(async ({session,bot,options},user_id)=>{
-            if(!user_id){
-                const atUser=(session.message.find(msg=>msg.type==='at') as AtElem)?.qq
-                if(typeof atUser==='number')user_id=atUser
-            }
-            if(!user_id){
-                const {id}=await session.prompt({
-                    type:'number',
+        .action(async ({session,bot,options},...user_ids)=>{
+            let kickUsers:number[]=[]
+            kickUsers.push(...user_ids.filter(user_id=>user_id.match(/^[0-9]*$/)).map(Number))
+            kickUsers.push(...session.message.filter(msg=>msg.type==='at'&& typeof msg.qq==='number').map(msg=>msg['qq']))
+            if(!kickUsers.length){
+                const {ids}=await session.prompt({
+                    type:'list',
                     message:'请输入你要踢出的成员qq',
-                    name:'id'
+                    name:'ids',
+                    format:(value)=>value.map(val=>Number(val))
                 })
-                if(id)user_id=id
+                if(ids.length)kickUsers.push(...ids)
             }
-            if(!user_id) return 'user_id无效'
-            return bot.pickGroup(session.group_id).kickMember(user_id,options.block)
+            if(!kickUsers.length)return '踢出了0个成员'
+            for(const user_id of kickUsers){
+                await bot.pickGroup(session.group_id).kickMember(user_id,options.block)
+            }
+            return `已踢出成员:${kickUsers.join(',')}。`
         })
     ctx.group()
-        .command('admin/bot/invite [user_id:number]','邀请好友加入群')
+        .command('admin/bot/invite [...user_id:number]','邀请好友加入群')
         .check(({session})=>{
             if((!['admin','owner'].includes(session.sender['role']) && !session.bot.admins.includes(session.sender.user_id))
-                || (!session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_admin
-                    && !session.bot.pickGroup(session.group_id).pickMember(session.self_id).is_owner)){
+                || (!session.bot.pickGroup(session.group_id).is_admin
+                    && !session.bot.pickGroup(session.group_id).is_owner)){
                 return '权限不足'
             }
         })
-        .action(async ({session,bot,options},user_id)=>{
-            if(!user_id){
-                const atUser=(session.message.find(msg=>msg.type==='at') as AtElem)?.qq
-                if(typeof atUser==='number')user_id=atUser
-            }
-            if(!user_id){
-                const {id}=await session.prompt({
-                    type:'number',
-                    message:'请输入你要踢出的成员qq',
-                    name:'id'
+        .action(async ({session,bot,options},...user_ids)=>{
+            if(!user_ids.length){
+                const {ids}=await session.prompt({
+                    type:'list',
+                    message:'请输入你要邀请的好友qq',
+                    format:(value)=>value.map(val=>Number(val)),
+                    name:'ids'
                 })
-                if(id)user_id=id
+                if(ids)user_ids.push(...ids)
             }
-            if(!user_id) return 'user_id无效'
-            return bot.pickGroup(session.group_id).invite(user_id)
+            if(!user_ids.length) return '邀请了了0个好友'
+            for(const user_id of user_ids){
+                await bot.pickGroup(session.group_id).invite(user_id)
+            }
+            return `已邀请:${user_ids.join(',')}。`
         })
 
     ctx.on('bot.request.friend.add',async (session)=>{
